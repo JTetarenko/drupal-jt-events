@@ -1,0 +1,47 @@
+<?php
+
+use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
+use Drupal\Core\Entity\EntityInterface;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+
+/**
+ * Checks if user is logged in and has access to see event content
+ *
+ * @param array $build
+ * @param EntityInterface $entity
+ * @param EntityViewDisplayInterface $display
+ * @param $view_mode
+ */
+function jt_events_node_view(array &$build,
+                              EntityInterface $entity,
+                              EntityViewDisplayInterface $display,
+                              $view_mode) {
+
+  if ($entity->bundle() === 'event') {
+    $user = \Drupal::currentUser();
+
+    if (!$user) {
+      throw new AccessDeniedHttpException();
+    }
+
+    // Let the event author see the page
+    if ($user->id() === $entity->getOwnerId()) {
+      return;
+    }
+
+    $participants = $entity->get('field_event_participants')->getValue();
+
+    $hasAccess = false;
+
+    foreach($participants as $participant) {
+      if ($participant['target_id'] === $user->id()) {
+        $hasAccess = true;
+        break;
+      }
+    }
+
+    if (!$hasAccess) {
+      throw new AccessDeniedHttpException();
+    }
+  }
+}

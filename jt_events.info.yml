@@ -1,0 +1,19 @@
+name: Events
+description: Event content type created for "MIDIS" test task
+package: Content type
+type: module
+core_version_requirement: ^8 || ^9
+dependencies:
+  - drupal:node
+  - drupal:path
+  - drupal:text
+  - drupal:datetime
+  - drupal:field
+  - drupal:ckeditor
+  - drupal:editor
+  - drupal:user
+  - drupal:views
+  - drupal:media
+  - drupal:media_library
+  - drupal:menu_ui
+php: 7.3

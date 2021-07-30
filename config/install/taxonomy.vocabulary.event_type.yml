@@ -1,0 +1,12 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - jt_events
+  enforced:
+    module:
+      - jt_events
+name: 'Event type'
+vid: event_type
+description: ''
+weight: 0

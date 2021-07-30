@@ -1,0 +1,6 @@
+services:
+  jt_events.commands:
+    class: \Drupal\jt_events\Commands\JtEventsCommands
+    tags:
+      - { name: drush.command }
+    arguments: ['@entity_type.manager', '@logger.factory']

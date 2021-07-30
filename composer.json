@@ -1,0 +1,17 @@
+{
+    "name": "drupal/jt_events",
+    "description": "Event content type created for \"MIDIS\" test task.",
+    "type": "drupal-module",
+    "autoload": {
+        "psr-4": {
+            "Drupal\\jt_events\\": "src/"
+        }
+    },
+    "extra": {
+        "drush": {
+            "services": {
+                "drush.services.yml": "^9 | ^10"
+            }
+        }
+    }
+}
