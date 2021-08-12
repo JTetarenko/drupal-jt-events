@@ -16,4 +16,6 @@ dependencies:
   - drupal:media
   - drupal:media_library
   - drupal:menu_ui
+  - drupal:mailsystem
+  - drupal:swiftmailer
 php: 7.3

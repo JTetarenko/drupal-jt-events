@@ -45,3 +45,11 @@ function jt_events_node_view(array &$build,
     }
   }
 }
+
+function jt_events_mail($key, &$message, $params) {
+  if ($key === 'notification') {
+    $message['subject'] = $params['subject'];
+    $message['body'][] = $params['message'];
+    $message['params']['attachments'] = $params['attachments'];
+  }
+}

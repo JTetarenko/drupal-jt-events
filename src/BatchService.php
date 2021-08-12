@@ -29,22 +29,26 @@ class BatchService {
       ? $event->get('field_event_type')->getValue()[0]['target_id']
       : null;
 
-    $params = ['context' => []];
+    $params = [];
 
-    $params['context']['subject'] = t('Notification about event');
+    $params['subject'] = t('Notification about event');
 
-    $params['context']['message'] = t('<h1>@name</h1><p>Event type: @type</p><p>Event date: @date</p><p>Description: @desc</p>', [
+    $params['message'] = t('<h1>@name</h1><p>Event type: @type</p><p>Event date: @date</p><p>Description: @desc</p>', [
       '@name' => $event->getTitle(),
       '@type' => !is_null($term_id) ? Term::load($term_id)->get('name')->value : $term_id,
       '@date' => $event->get('field_event_date')->value,
-      '@desc' => $event->get('field_event_description')->value,
+      '@desc' => nl2br($event->get('field_event_description')->value),
     ]);
 
     if (!$event->field_event_image->isEmpty()) {
       $image_field = $event->get('field_event_image')->getValue();
       $media_id = Media::load($image_field[0]['target_id']);
       $image = File::load($media_id->id());
-      $params['attachments'][] = $image;
+      $params['attachments'][] = [
+        'filecontent' => file_get_contents($image->getFileUri()),
+        'filename' => $image->getFilename(),
+        'filemime' => $image->getMimeType()
+      ];
     }
 
     $participants = $event->get('field_event_participants')->getValue();
@@ -60,7 +64,7 @@ class BatchService {
 
     $mailManager = \Drupal::service('plugin.manager.mail');
 
-    $mailManager->mail('jt_events', 'mail', $to, $langcode, $params);
+    $mailManager->mail('jt_events', 'notification', $to, $langcode, $params, null, true);
 
     $context['results'][] = $id;
     // Optional message displayed under the progressbar.
